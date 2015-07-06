@@ -1,0 +1,41 @@
+.new_cocktail
+{
+	margin: 10px;
+	width: 306px;
+	height: 300px;
+	padding: 62px;
+	text-align: center;
+}
+
+.new_cocktail label
+{
+	display: inline-block;
+	margin-bottom: 4%;
+}
+
+.new_cocktail input.cocktail_name
+{
+	border: 1px solid #000;
+	padding: 4px;
+	margin-bottom: 6%;
+}
+
+.new_cocktail input.submit
+{
+	margin-top: 10%;
+	padding: 2px;
+	height: 11%;
+	width: 34%;
+	font-family: Purisa, Arial;
+}
+
+.new_cocktail input.submit:hover
+{
+	cursor: pointer;
+}
+
+.new_cocktail .drinks_list
+{
+	max-height: 66%;
+	overflow: auto;
+}

@@ -1,0 +1,19 @@
+{{ define "header_elements" }}
+<a href="/forms/new-drink" class="add_link add_drink_link fancybox.ajax" id="add_drink_link">Add drink</a>
+<a href="/forms/new-cocktail" class="add_link add_cocktail_link fancybox.ajax" id="add_cocktail_link">Add cocktail</a>
+{{ end }}
+{{ define "content" }}
+  {{ range .Drinks }}
+    <div class="drink_container white_element">
+      <span class="drink_name">{{ .Name }}</span>
+      <a href="/forms/edit-drink/{{ .Id }}" class="edit_drink_link fancybox.ajax" id="edit_drink_link"></a>
+      <a href="/forms/delete-drink/{{ .Id }}" class="delete_drink"></a>
+    </div>
+  {{ end }}
+  {{ range .Cocktails }}
+    <div class="cocktail_container white_element">
+      <span class="cocktail_name">{{ .Name }}</span>
+    </div>
+  {{ end }}
+  <div class="clear"></div>
+{{ end }}

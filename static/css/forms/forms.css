@@ -1,0 +1,27 @@
+*
+{
+    margin: 0;
+    padding: 0;
+    outline: none;
+    border: none;
+}
+
+body, div, a, p, ul, ol, li, table, td, th, span
+{
+    font-family: Purisa, Arial;
+    font-weight: normal;
+    color: #2f3539;
+}
+
+h1, h2, h3, h4, h5, h6
+{
+    font-family: Arial;
+}
+
+.clear
+{
+    clear: both;
+    height: 0 !important;
+    width: auto !important;
+    border: none !important;
+}
