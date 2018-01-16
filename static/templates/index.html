@@ -13,6 +13,11 @@
   {{ range .Cocktails }}
     <div class="cocktail_container white_element">
       <span class="cocktail_name">{{ .Name }}</span>
+      {{ range .Drinks }}
+          <ul class="cocktail_parts">
+              <li class="drink_name">{{ .Name }}</li>
+          </ul>
+      {{ end }}
     </div>
   {{ end }}
   <div class="clear"></div>

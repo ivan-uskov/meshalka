@@ -8,6 +8,7 @@ import (
 type Cocktail struct {
 	Id   int
 	Name string
+	Drinks map[int]Drink
 }
 
 func validateCocktailId(id string) error {
@@ -34,48 +35,51 @@ func NewCocktail(name string, drinks string) error {
 	return err
 }
 
-func GetCocktail() []Cocktail {
+func GetCocktails() map[int]Cocktail {
 	con, err := getCon()
 	if err != nil {
-		return []Cocktail{}
+		return make(map[int]Cocktail)
 	}
 	defer con.Close()
 
-	return selectCocktail(con)
+	return selectCocktails(con)
 }
 
-func selectCocktail(con *sql.DB) []Cocktail {
-	cocktails := []Cocktail{}
-	rows, err := con.Query("SELECT cocktail_id, cocktail_name FROM cocktail")
+func selectCocktails(con *sql.DB) map[int]Cocktail {
+	rows, err := con.Query("SELECT cocktail_id, cocktail_name, d.drink_id, d.drink_name FROM cocktail LEFT JOIN cocktail_element USING(cocktail_id) LEFT JOIN drink d USING(drink_id)")
 	if err != nil {
-		fmt.Printf("Can't get cocktails, ", err.Error())
-		return cocktails
+		fmt.Printf("Can't get cocktails, %s", err.Error())
+		return make(map[int]Cocktail)
 	}
 	defer rows.Close()
 
-	cocktails, err = fetchCocktail(rows)
+	cocktails, err := fetchCocktails(rows)
 	if err != nil {
-		fmt.Printf("Can't parse cocktails, ", err.Error())
+		fmt.Printf("Can't parse cocktails, %s", err.Error())
 	}
 
 	return cocktails
 }
 
-func fetchCocktail(rows *sql.Rows) ([]Cocktail, error) {
-	cocktails := []Cocktail{}
+func fetchCocktails(rows *sql.Rows) (map[int]Cocktail, error) {
+	cocktails := make(map[int]Cocktail)
 	var id int
 	var name string
+	var drinkId int
+	var drinkName string
 	var err error
 
 	for rows.Next() {
-		err = rows.Scan(&id, &name)
+		err = rows.Scan(&id, &name, &drinkId, &drinkName)
 		if err != nil {
 			break
 		}
-		cocktails = append(cocktails, Cocktail{
-			Id:   id,
-			Name: name,
-		})
+
+		_, ok := cocktails[id]
+		if !ok {
+			cocktails[id] = Cocktail{id, name, make(map[int]Drink)}
+		}
+		cocktails[id].Drinks[drinkId] = Drink{drinkId, drinkName}
 	}
 
 	return cocktails, err

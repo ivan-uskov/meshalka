@@ -9,13 +9,13 @@ import (
 
 type indexData struct {
 	Drinks    []database.Drink
-	Cocktails []database.Cocktail
+	Cocktails map[int]database.Cocktail
 }
 
 func Index(w http.ResponseWriter, r *http.Request, p config.Page) {
 	data := indexData{
 		Drinks:    database.GetDrinks(),
-		Cocktails: database.GetCocktail(),
+		Cocktails: database.GetCocktails(),
 	}
 
 	pi := config.NewPageInfo(p.Id, "Cocktails", "index.html", data)

@@ -71,3 +71,14 @@
 	right: 13%;
 	top: 37%;
 }
+
+.cocktail_parts
+{
+	padding-left: 25px;
+	margin-top: 5px;
+}
+
+.cocktail_parts li
+{
+	font-size: 12px;
+}
