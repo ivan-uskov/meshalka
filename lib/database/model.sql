@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS cocktail_element
 );
 
 DELIMITER $$
-DROP PROCEDURE add_cocktail$$
+DROP PROCEDURE IF EXISTS add_cocktail$$
 
 CREATE PROCEDURE add_cocktail(cocktailName VARCHAR(255), drinkIdString VARCHAR(500))
 BEGIN
@@ -48,7 +48,7 @@ BEGIN
   END WHILE;
 
   DEALLOCATE PREPARE stmt;
-END$$
+END $$
 
 DELIMITER ;
 

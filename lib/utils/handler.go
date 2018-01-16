@@ -6,10 +6,21 @@ import (
 	"net/http"
 	"regexp"
 	"strings"
+	auth "github.com/abbot/go-http-auth"
 )
 
+func Secret(user, realm string) string {
+	if user == "ivan" {
+		// password is "hello"
+		return "$1$dlPL2MqE$oQmn16q49SqdmhenQuNgs1"
+	}
+	return ""
+}
+
+
 func AddHandler(page config.Page, fn config.Handler) {
-	http.HandleFunc(page.Path, func(w http.ResponseWriter, r *http.Request) {
+	authenticator := auth.NewBasicAuthenticator("example.com", Secret)
+	http.HandleFunc(page.Path, authenticator.Wrap(func(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
 		if page.Args.Use {
 			fmt.Println(page.Path)
 			m := getUrlMatches(page, r.URL.Path)
@@ -21,7 +32,7 @@ func AddHandler(page config.Page, fn config.Handler) {
 		} else {
 			fn(w, r, page.Copy())
 		}
-	})
+	}))
 }
 
 func getPageWithArgs(page config.Page, matches []string) config.Page {
