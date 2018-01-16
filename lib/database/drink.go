@@ -96,6 +96,16 @@ func createDrink(name string, con *sql.DB) error {
 	return err
 }
 
+func GetDrink(id int) (*Drink, error) {
+	con, err := getCon()
+	if err != nil {
+		return nil, err
+	}
+	defer con.Close()
+
+	return selectDrink(id, con)
+}
+
 func GetDrinks() []Drink {
 	con, err := getCon()
 	if err != nil {
@@ -105,6 +115,29 @@ func GetDrinks() []Drink {
 
 	return selectDrinks(con)
 }
+
+func selectDrink(id int, con *sql.DB) (*Drink, error) {
+	rows, err := con.Query("SELECT drink_name FROM drink WHERE drink_id = ? LIMIT 1", id)
+	if err != nil {
+		fmt.Printf("Can't get drinks, %s", err.Error())
+		return nil, err
+	}
+	defer rows.Close()
+
+	var name string
+
+	if rows.Next() {
+		err = rows.Scan(&name)
+		if err != nil {
+			return nil, err
+		}
+
+		return &Drink{id, name}, nil
+	}
+
+	return nil, fmt.Errorf("drink with id %d not exists", id)
+}
+
 
 func selectDrinks(con *sql.DB) []Drink {
 	drinks := []Drink{}

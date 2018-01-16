@@ -7,7 +7,7 @@ import (
 )
 
 func NewDrinkForm(w http.ResponseWriter, r *http.Request, p config.Page) {
-	fi := config.NewFormInfo(p.Id, "new-drink.html", String{})
+	fi := config.NewFormInfo(p.Id, "new-drink.html", struct{}{})
 
 	templates.RenderForm(w, fi)
 }
