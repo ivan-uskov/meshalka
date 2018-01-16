@@ -1,18 +1,14 @@
-.header .add_link
+.header .top_buttons_container
 {
-	display: inline-block;
-	position: absolute;
-	top: 36%;
+    display: inline-block;
+    position: absolute;
+    top: 36%;
+    right: 5%;
 }
 
-.header .add_link.add_drink_link
+.header .top_buttons_container
 {
-	right: 5%;
-}
-
-.header .add_link.add_cocktail_link
-{
-	right: 14%;
+    display: inline-block;
 }
 
 .main_container .content

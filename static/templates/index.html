@@ -1,6 +1,8 @@
 {{ define "header_elements" }}
-<a href="/forms/new-drink" class="add_link add_drink_link fancybox.ajax" id="add_drink_link">Add drink</a>
-<a href="/forms/new-cocktail" class="add_link add_cocktail_link fancybox.ajax" id="add_cocktail_link">Add cocktail</a>
+<span class="top_buttons_container">
+  <a href="/forms/new-drink" class="add_drink_link fancybox.ajax" id="add_drink_link">Add drink</a>
+  <a href="/forms/new-cocktail" class="add_cocktail_link fancybox.ajax" id="add_cocktail_link">Add cocktail</a>
+</span>
 {{ end }}
 {{ define "content" }}
   {{ range .Drinks }}
