@@ -6,7 +6,7 @@ import (
 )
 
 var routes = []config.Route{
-	config.Route{
+	{
 		P: config.Page{
 			Id:   "index",
 			Path: "/",
@@ -17,7 +17,7 @@ var routes = []config.Route{
 		},
 		H: Index,
 	},
-	config.Route{
+	{
 		P: config.Page{
 			Id:   "new-cocktail-form",
 			Path: "/forms/new-cocktail",
@@ -28,7 +28,7 @@ var routes = []config.Route{
 		},
 		H: NewCocktailForm,
 	},
-	config.Route{
+	{
 		P: config.Page{
 			Id:   "new-drink-form",
 			Path: "/forms/new-drink",
@@ -39,7 +39,7 @@ var routes = []config.Route{
 		},
 		H: NewDrinkForm,
 	},
-	config.Route{
+	{
 		P: config.Page{
 			Id:   "edit-drink-form",
 			Path: "/forms/edit-drink/",
@@ -52,7 +52,7 @@ var routes = []config.Route{
 		},
 		H: EditDrinkForm,
 	},
-	config.Route{
+	{
 		P: config.Page{
 			Id:   "delete-drink",
 			Path: "/forms/delete-drink/",
@@ -65,7 +65,7 @@ var routes = []config.Route{
 		},
 		H: DeleteDrink,
 	},
-	config.Route{
+	{
 		P: config.Page{
 			Id:   "new-drink-save",
 			Path: "/ajax/save-drink",
@@ -76,7 +76,7 @@ var routes = []config.Route{
 		},
 		H: NewDrinkSave,
 	},
-	config.Route{
+	{
 		P: config.Page{
 			Id:   "new-cocktail-save",
 			Path: "/ajax/save-cocktail",
@@ -87,7 +87,7 @@ var routes = []config.Route{
 		},
 		H: NewCocktailSave,
 	},
-	config.Route{
+	{
 		P: config.Page{
 			Id:   "edit-drink-save",
 			Path: "/ajax/edit-drink/",
@@ -100,7 +100,7 @@ var routes = []config.Route{
 		},
 		H: EditDrinkSave,
 	},
-	config.Route{
+	{
 		P: config.Page{
 			Id:   "static",
 			Path: "/static/",

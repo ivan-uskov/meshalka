@@ -17,7 +17,6 @@ func Secret(user, realm string) string {
 	return ""
 }
 
-
 func AddHandler(page config.Page, fn config.Handler) {
 	authenticator := auth.NewBasicAuthenticator("example.com", Secret)
 	http.HandleFunc(page.Path, authenticator.Wrap(func(w http.ResponseWriter, r *auth.AuthenticatedRequest) {
@@ -25,12 +24,12 @@ func AddHandler(page config.Page, fn config.Handler) {
 			fmt.Println(page.Path)
 			m := getUrlMatches(page, r.URL.Path)
 			if m == nil {
-				http.NotFound(w, r)
+				http.NotFound(w, &r.Request)
 				return
 			}
-			fn(w, r, getPageWithArgs(page, m))
+			fn(w, &r.Request, getPageWithArgs(page, m))
 		} else {
-			fn(w, r, page.Copy())
+			fn(w, &r.Request, page.Copy())
 		}
 	}))
 }

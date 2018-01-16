@@ -1,11 +1,8 @@
 package database
 
 import (
-	"bytes"
 	"database/sql"
-	"errors"
 	"fmt"
-	"os/exec"
 )
 
 type Cocktail struct {
@@ -26,26 +23,15 @@ func validateDrinks(drinks string) error {
 }
 
 func NewCocktail(name string, drinks string) error {
-	var out bytes.Buffer
-
-	cmd := exec.Command("/usr/bin/php", "./add_cocktail.php", name, drinks)
-	cmd.Stdout = &out
-
-	err := cmd.Run()
+	con, err := getCon()
 	if err != nil {
 		return err
 	}
+	defer con.Close()
 
-	return parseNewCocktailOutput(out.String())
-}
+	_, err = con.Exec("CALL add_cocktail(?, ?)", name, drinks)
 
-func parseNewCocktailOutput(out string) error {
-	fmt.Println("Add cocktail reported: " + out)
-	if out != "1" {
-		return errors.New("Cocktail creation error!")
-	}
-
-	return nil
+	return err
 }
 
 func GetCocktail() []Cocktail {
