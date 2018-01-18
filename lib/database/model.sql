@@ -1,6 +1,6 @@
 CREATE DATABASE IF NOT EXISTS cocktails;
 
-USE cocktails
+USE cocktails;
 
 CREATE TABLE IF NOT EXISTS drink 
 (
