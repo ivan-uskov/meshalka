@@ -14,6 +14,24 @@
   version = "v1.3"
 
 [[projects]]
+  name = "github.com/gorilla/context"
+  packages = ["."]
+  revision = "1ea25387ff6f684839d82767c1733ff4d4d15d0a"
+  version = "v1.1"
+
+[[projects]]
+  name = "github.com/gorilla/securecookie"
+  packages = ["."]
+  revision = "667fe4e3466a040b780561fe9b51a83a3753eefc"
+  version = "v1.1"
+
+[[projects]]
+  name = "github.com/gorilla/sessions"
+  packages = ["."]
+  revision = "ca9ada44574153444b00d3fd9c8559e4cc95f896"
+  version = "v1.1"
+
+[[projects]]
   branch = "master"
   name = "golang.org/x/crypto"
   packages = [
@@ -28,9 +46,15 @@
   packages = ["context"]
   revision = "5ccada7d0a7ba9aeb5d3aca8d3501b4c2a509fec"
 
+[[projects]]
+  branch = "v2"
+  name = "gopkg.in/yaml.v2"
+  packages = ["."]
+  revision = "d670f9405373e636a5a2765eea47fac0c9bc91a4"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "f74116b5d07712fe8caa1c78b299a76ad4870cd8ba6bb84950dc587c073d3a64"
+  inputs-digest = "053dfdf36721367d50118e5d5768b64d648969bfb344128b4bf236e8b9011799"
   solver-name = "gps-cdcl"
   solver-version = 1

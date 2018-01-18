@@ -1,0 +1,7 @@
+listen: ":8080"
+
+database:
+  dsn:    "root:1234@/meshalka"
+  driver: "mysql"
+
+session_secret: "super-secret-key"
