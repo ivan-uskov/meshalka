@@ -22,7 +22,7 @@ func prepareResponse(drinks map[uint64]model.Drink) ([]byte, error) {
 	return json.Marshal(list{drinksList})
 }
 
-func List(writer http.ResponseWriter, request *http.Request, rc *RequestContext) {
+func List(writer http.ResponseWriter, rc *RequestContext) {
 	drinks, err := model.NewDrinkRepository(rc.Ctx.Database).List()
 	if err != nil {
 		fmt.Println(err)

@@ -48,3 +48,28 @@ DETERMINISTIC
   END $$
 
 DELIMITER ;
+
+DELIMITER $$
+DROP FUNCTION IF EXISTS `remove_drink`$$
+CREATE FUNCTION `remove_drink`(drinkId BIGINT UNSIGNED)
+  RETURNS TINYINT(1)
+DETERMINISTIC
+  BEGIN
+    DECLARE lock_success TINYINT(1) DEFAULT 0;
+    DECLARE drink_exists TINYINT(1) DEFAULT 0;
+
+    SELECT lock_drink() INTO lock_success;
+
+    IF (lock_success = 1) THEN
+      SELECT COUNT(*) > 0 INTO drink_exists FROM drink WHERE drink_id = drinkId;
+      IF (drink_exists = 1) THEN
+        DELETE FROM drink WHERE drink_id = drinkId;
+      END IF;
+
+      SELECT unlock_drink() INTO lock_success;
+    END IF;
+
+    RETURN lock_success && drink_exists;
+  END $$
+
+DELIMITER ;

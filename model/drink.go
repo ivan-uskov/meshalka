@@ -13,6 +13,7 @@ type Drink struct {
 type DrinkRepository interface {
 	Add(name string) (bool, error)
 	List() (map[uint64]Drink, error)
+	Remove(id int) (bool, error)
 }
 
 type drinkRepository struct {
@@ -26,6 +27,12 @@ func NewDrinkRepository(db database.Database) DrinkRepository {
 func (dr * drinkRepository) Add(name string) (bool, error) {
 	return getBoolResult(getIntFunctionResult(dr.db, func(con *sql.DB) (*sql.Rows, error) {
 		return con.Query(`SELECT add_drink(?)`, name)
+	}))
+}
+
+func (dr * drinkRepository) Remove(id int) (bool, error) {
+	return getBoolResult(getIntFunctionResult(dr.db, func(con *sql.DB) (*sql.Rows, error) {
+		return con.Query(`SELECT remove_drink(?)`, id)
 	}))
 }
 
