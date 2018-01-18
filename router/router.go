@@ -12,6 +12,7 @@ const (
 	loginAction = `login`
 	registerAction = `register`
 	addDrinkAction = `add_drink`
+	listAction = `list`
 )
 
 type requestBody struct {
@@ -75,6 +76,8 @@ func (r *router) executeAction(w http.ResponseWriter, hr *http.Request, req *req
 		action.Registration(w, hr, rc)
 	case addDrinkAction:
 		action.AddDrink(w, hr, rc)
+	case listAction:
+		action.List(w, hr, rc)
 	default:
 		http.NotFound(w, hr)
 	}

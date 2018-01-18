@@ -2,7 +2,6 @@ package model
 
 import (
 	"database/sql"
-	_ "github.com/go-sql-driver/mysql"
 	"fmt"
 	"crypto/md5"
 	"meshalka/database"
@@ -57,8 +56,6 @@ func (ur *userRepository) SelectUserById(userId uint64) (*User, error) {
 		return con.Query(q, userId)
 	})
 }
-
-type querier func(con *sql.DB) (*sql.Rows, error)
 
 func (ur *userRepository) selectUser(q querier) (*User, error) {
 	con, err := ur.db.Connection()

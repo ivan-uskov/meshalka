@@ -3,7 +3,10 @@ package model
 import (
 	"fmt"
 	"meshalka/database"
+	"database/sql"
 )
+
+type querier func(con *sql.DB) (*sql.Rows, error)
 
 func getBoolResult(res int, err error) (bool, error) {
 	if err != nil {
