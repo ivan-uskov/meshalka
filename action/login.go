@@ -4,12 +4,16 @@ import (
 	"net/http"
 	"encoding/json"
 	"meshalka/model"
-	"fmt"
 )
 
 type loginData struct {
 	Login string `json:"login"`
 	Pass  string `json:"pass"`
+}
+
+type loginResponse struct {
+	Login string `json:"login"`
+	UserId uint64 `json:"user_id"`
 }
 
 func parseLoginData(data string) (*loginData, error) {
@@ -32,7 +36,13 @@ func Login(writer http.ResponseWriter, request *http.Request, rc *RequestContext
 	}
 
 	if rc.Ctx.Session.Login(writer, request, user) {
-		writer.Write([]byte(fmt.Sprintf(`{"login":"%s","user_id":"%d"}`, user.Login, user.UserId)))
+		data, err := json.Marshal(loginResponse{user.Login, user.UserId})
+		if err != nil {
+			http.Error(writer, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+
+		writer.Write(data)
 	} else {
 		http.Error(writer, "Internal Server Error", http.StatusInternalServerError)
 	}
