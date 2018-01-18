@@ -35,9 +35,9 @@ type userRepository struct {
 }
 
 func (ur *userRepository) AddUser(login string, rawPass string) (bool, error) {
-	return ur.getFunctionResult(func(con *sql.DB) (*sql.Rows, error) {
+	return getBoolResult(getIntFunctionResult(ur.db, func(con *sql.DB) (*sql.Rows, error) {
 		return con.Query(`SELECT add_user(?, ?)`, login, encodePassword(rawPass))
-	})
+	}))
 }
 
 func (ur *userRepository) SelectUserByLoginInfo(login string, rawPass string) (*User, error) {
@@ -59,28 +59,6 @@ func (ur *userRepository) SelectUserById(userId uint64) (*User, error) {
 }
 
 type querier func(con *sql.DB) (*sql.Rows, error)
-
-func (ur *userRepository) getFunctionResult(q querier) (bool, error) {
-	con, err := ur.db.Connection()
-	if err != nil {
-		return false, err
-	}
-
-	rows, err := q(con)
-	if err != nil {
-		return false, err
-	}
-	defer rows.Close()
-
-	var success int
-	if rows.Next() {
-		if rows.Scan(&success) == nil {
-			return success > 0, nil
-		}
-	}
-
-	return false, fmt.Errorf("function error")
-}
 
 func (ur *userRepository) selectUser(q querier) (*User, error) {
 	con, err := ur.db.Connection()

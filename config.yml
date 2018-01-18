@@ -1,4 +1,4 @@
-listen: ":8080"
+listen: ":8425"
 
 database:
   dsn:    "root:1234@/meshalka"
