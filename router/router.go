@@ -13,6 +13,7 @@ const (
 	registerAction = `register`
 	addDrinkAction = `add_drink`
 	removeDrinkAction = `remove_drink`
+	editDrinkAction = `edit_drink`
 	listAction = `list`
 )
 
@@ -81,6 +82,8 @@ func (r *router) executeAction(w http.ResponseWriter, hr *http.Request, req *req
 		action.List(w, rc)
 	case removeDrinkAction:
 		action.RemoveDrink(w, hr, rc)
+	case editDrinkAction:
+		action.EditDrink(w, hr, rc)
 	default:
 		http.NotFound(w, hr)
 	}

@@ -1,7 +1,0 @@
-{{ define "form" }}
-<form action="/ajax/edit-drink/{{ .Drink.Id }}" method="POST" class="edit_drink" id="edit_drink_form">
-	<label>New name for drink:</label><br />
-	<input type="text" id="drink_name" name="drink_name" class="drink_name" value="{{ .Drink.Name }}"/><br />
-	<input type="submit" id="submit" value="Update" class="submit"/>
-</form>
-{{ end }}

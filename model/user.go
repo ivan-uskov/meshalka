@@ -19,6 +19,8 @@ func encodePassword(rawPass string) string {
 	return hex.EncodeToString(sum[:])
 }
 
+const maxLoginLength = 255
+
 type UserRepository interface {
 	SelectUserByLoginInfo(login string, rawPass string) (*User, error)
 	SelectUserById(userId uint64) (*User, error)
@@ -34,6 +36,10 @@ type userRepository struct {
 }
 
 func (ur *userRepository) AddUser(login string, rawPass string) (bool, error) {
+	if len(login) >= maxLoginLength {
+		return false, fmt.Errorf("login too long")
+	}
+
 	return getBoolResult(getIntFunctionResult(ur.db, func(con *sql.DB) (*sql.Rows, error) {
 		return con.Query(`SELECT add_user(?, ?)`, login, encodePassword(rawPass))
 	}))

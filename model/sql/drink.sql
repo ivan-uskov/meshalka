@@ -73,3 +73,28 @@ DETERMINISTIC
   END $$
 
 DELIMITER ;
+
+DELIMITER $$
+DROP FUNCTION IF EXISTS `edit_drink`$$
+CREATE FUNCTION `edit_drink`(drinkId BIGINT UNSIGNED, newDrinkName VARCHAR(255))
+  RETURNS TINYINT(1)
+DETERMINISTIC
+  BEGIN
+    DECLARE lock_success TINYINT(1) DEFAULT 0;
+    DECLARE drink_exists TINYINT(1) DEFAULT 0;
+    DECLARE name_busy TINYINT(1) DEFAULT 0;
+
+    SELECT lock_drink() INTO lock_success;
+    IF (lock_success = 1) THEN
+      SELECT COUNT(*) > 0 INTO name_busy FROM drink WHERE drink_id <> drinkId AND drink_name = newDrinkName;
+      SELECT COUNT(*) > 0 INTO drink_exists FROM drink WHERE drink_id = drinkId;
+      IF (NOT name_busy AND drink_exists) THEN
+        UPDATE drink SET drink_name = newDrinkName WHERE drink_id = drinkId;
+      END IF;
+      SELECT unlock_drink() INTO lock_success;
+    END IF;
+
+    RETURN lock_success && drink_exists && NOT name_busy;
+  END $$
+
+DELIMITER ;
