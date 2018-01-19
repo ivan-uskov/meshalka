@@ -9,7 +9,7 @@ import (
 
 type editDrinkData struct {
 	Id uint64 `json:"id"`
-	NewName string `json:"new_name"`
+	NewName string `json:"name"`
 }
 
 func parseEditDrinkData(rawData string) (editDrinkData, error) {
