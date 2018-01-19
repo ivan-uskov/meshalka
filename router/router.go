@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"encoding/json"
 	"meshalka/contexts"
-	"meshalka/action"
+	"meshalka/actions"
 )
 
 const (
@@ -14,6 +14,7 @@ const (
 	addDrinkAction = `add_drink`
 	removeDrinkAction = `remove_drink`
 	editDrinkAction = `edit_drink`
+	addCocktailAction = `add_cocktail`
 	listAction = `list`
 )
 
@@ -59,7 +60,7 @@ func isPrivateAction(action string) bool {
 }
 
 func (r *router) executeAction(w http.ResponseWriter, hr *http.Request, req *requestBody) {
-	rc := &action.RequestContext{Data: req.Data}
+	rc := &actions.RequestContext{Data: req.Data}
 	if isPrivateAction(req.Action) {
 		if user, ok := r.ctx.Session.AutoLoginFilter(hr); ok {
 			rc.User = user
@@ -73,17 +74,19 @@ func (r *router) executeAction(w http.ResponseWriter, hr *http.Request, req *req
 
 	switch req.Action {
 	case loginAction:
-		action.Login(w, hr, rc)
+		actions.Login(w, hr, rc)
 	case registerAction:
-		action.Registration(w, hr, rc)
+		actions.Registration(w, hr, rc)
 	case addDrinkAction:
-		action.AddDrink(w, rc)
+		actions.AddDrink(w, rc)
 	case listAction:
-		action.List(w, rc)
+		actions.List(w, rc)
 	case removeDrinkAction:
-		action.RemoveDrink(w, hr, rc)
+		actions.RemoveDrink(w, hr, rc)
 	case editDrinkAction:
-		action.EditDrink(w, hr, rc)
+		actions.EditDrink(w, hr, rc)
+	case addCocktailAction:
+		actions.AddCocktail(w, rc)
 	default:
 		http.NotFound(w, hr)
 	}
