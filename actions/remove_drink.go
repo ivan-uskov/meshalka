@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strconv"
 	"meshalka/model"
+	"fmt"
 )
 
 func RemoveDrink(writer http.ResponseWriter, request *http.Request, rc *RequestContext) {
@@ -20,6 +21,9 @@ func RemoveDrink(writer http.ResponseWriter, request *http.Request, rc *RequestC
 	}
 
 	if !removed {
-		http.Error(writer, "Drink not exists", http.StatusNoContent)
+		http.NotFound(writer, request)
+		return
 	}
+
+	writer.Write([]byte(fmt.Sprintf(`{"status":"deleted"}`)))
 }
