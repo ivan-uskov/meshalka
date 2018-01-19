@@ -8,14 +8,14 @@ import (
 
 const (
 	maxNameLength = 255
-	drinkType = 0
-	cocktailType = 1
+	drinkType     = 0
+	cocktailType  = 1
 )
 
 type Drink struct {
-	Id uint64 `json:"id"`
+	Id   uint64 `json:"id"`
 	Name string `json:"name"`
-	Type int `json:"type"`
+	Type int    `json:"type"`
 }
 
 type DrinkRepository interface {
@@ -24,6 +24,8 @@ type DrinkRepository interface {
 	List() (map[uint64]Drink, error)
 	Remove(id int) (bool, error)
 	Edit(id uint64, newName string) (int, error)
+	AddCocktailElement(cocktailId uint64, drinkId uint64, quantity uint64) (int, error)
+	RemoveWithExclusion(cocktailId uint64, excludedKeys string) error
 }
 
 type drinkRepository struct {
@@ -34,12 +36,28 @@ func NewDrinkRepository(db database.Database) DrinkRepository {
 	return &drinkRepository{db}
 }
 
-func (dr * drinkRepository) IsNameValid(name string) bool {
+func (dr *drinkRepository) IsNameValid(name string) bool {
 	l := len(name)
-	return l > 0  && l <= maxNameLength
+	return l > 0 && l <= maxNameLength
 }
 
-func (dr * drinkRepository) Add(name string, t int) (int, error) {
+func (dr *drinkRepository) RemoveWithExclusion(cocktailId uint64, excludedKeys string) error {
+	con, err := dr.db.Connection()
+	if err != nil {
+		return err
+	}
+
+	_, err = con.Query(`DELETE FROM cocktail_element WHERE cocktail_id = ? AND drink_id NOT IN (?)`, cocktailId, excludedKeys)
+	return err
+}
+
+func (dr *drinkRepository) AddCocktailElement(cocktailId uint64, drinkId uint64, quantity uint64) (int, error) {
+	return getIntFunctionResult(dr.db, func(con *sql.DB) (*sql.Rows, error) {
+		return con.Query(`SELECT add_cocktail_element(?, ?, ?)`, cocktailId, drinkId, quantity)
+	})
+}
+
+func (dr *drinkRepository) Add(name string, t int) (int, error) {
 	if !dr.IsNameValid(name) {
 		return 0, fmt.Errorf("incorrect name")
 	}
@@ -61,19 +79,19 @@ func (dr * drinkRepository) Add(name string, t int) (int, error) {
 	return res, nil
 }
 
-func (dr * drinkRepository) Remove(id int) (bool, error) {
+func (dr *drinkRepository) Remove(id int) (bool, error) {
 	return getBoolResult(getIntFunctionResult(dr.db, func(con *sql.DB) (*sql.Rows, error) {
 		return con.Query(`SELECT remove_drink(?)`, id)
 	}))
 }
 
-func (dr * drinkRepository) List() (map[uint64]Drink, error) {
+func (dr *drinkRepository) List() (map[uint64]Drink, error) {
 	return dr.selectDrinks(func(con *sql.DB) (*sql.Rows, error) {
 		return con.Query(`SELECT drink_id, drink_name FROM drink`)
 	})
 }
 
-func (dr * drinkRepository) Edit(id uint64, newName string) (int, error) {
+func (dr *drinkRepository) Edit(id uint64, newName string) (int, error) {
 	if !dr.IsNameValid(newName) {
 		return 0, fmt.Errorf("incorrect new name")
 	}

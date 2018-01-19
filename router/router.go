@@ -9,12 +9,13 @@ import (
 )
 
 const (
-	loginAction = `login`
-	registerAction = `register`
-	addDrinkAction = `add_drink`
-	removeDrinkAction = `remove_drink`
-	editDrinkAction = `edit_drink`
-	listAction = `list`
+	loginAction                  = `login`
+	registerAction               = `register`
+	addDrinkAction               = `add_drink`
+	removeDrinkAction            = `remove_drink`
+	editDrinkAction              = `edit_drink`
+	editCocktailComponentsAction = `edit_cocktail_components`
+	listAction                   = `list`
 )
 
 type requestBody struct {
@@ -84,6 +85,8 @@ func (r *router) executeAction(w http.ResponseWriter, hr *http.Request, req *req
 		actions.RemoveDrink(w, hr, rc)
 	case editDrinkAction:
 		actions.EditDrink(w, hr, rc)
+	case editCocktailComponentsAction:
+		actions.EditCocktailComponents(w, hr, rc)
 	default:
 		http.NotFound(w, hr)
 	}
