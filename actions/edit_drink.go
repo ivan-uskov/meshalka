@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"encoding/json"
 	"meshalka/model"
+	"fmt"
 )
 
 type editDrinkData struct {
@@ -24,13 +25,27 @@ func EditDrink(writer http.ResponseWriter, request *http.Request, rc *RequestCon
 		return
 	}
 
-	added, err := model.NewDrinkRepository(rc.Ctx.Database).Edit(data.Id, data.NewName)
-	if err != nil {
-		http.Error(writer, "Internal error", http.StatusInternalServerError)
+	dr := model.NewDrinkRepository(rc.Ctx.Database)
+	if !dr.IsNameValid(data.NewName) {
+		http.Error(writer, `{"status":"invalid_name"}`, http.StatusBadRequest)
 		return
 	}
 
-	if !added {
-		http.Error(writer, "Name busy or drink not exists", http.StatusBadRequest)
+	res, err := model.NewDrinkRepository(rc.Ctx.Database).Edit(data.Id, data.NewName)
+	if err != nil {
+		fmt.Println(err)
+		http.Error(writer, "Internal error", http.StatusInternalServerError)
+		return
 	}
+	if res == -2 { //drink not exist
+		http.NotFound(writer, request)
+		return
+	}
+
+	if res == 0 {
+		http.Error(writer, `{"status":"name_busy"}`, http.StatusBadRequest)
+		return
+	}
+
+	writer.Write([]byte(fmt.Sprintf(`{"status":"updated"}`)))
 }

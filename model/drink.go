@@ -23,7 +23,7 @@ type DrinkRepository interface {
 	Add(name string, t int) (int, error)
 	List() (map[uint64]Drink, error)
 	Remove(id int) (bool, error)
-	Edit(id uint64, newName string) (bool, error)
+	Edit(id uint64, newName string) (int, error)
 }
 
 type drinkRepository struct {
@@ -41,7 +41,7 @@ func (dr * drinkRepository) IsNameValid(name string) bool {
 
 func (dr * drinkRepository) Add(name string, t int) (int, error) {
 	if !dr.IsNameValid(name) {
-		return 0, fmt.Errorf("incorrect name size")
+		return 0, fmt.Errorf("incorrect name")
 	}
 
 	if t != cocktailType {
@@ -73,14 +73,22 @@ func (dr * drinkRepository) List() (map[uint64]Drink, error) {
 	})
 }
 
-func (dr * drinkRepository) Edit(id uint64, newName string) (bool, error) {
-	if len(newName) >= maxNameLength {
-		return false, fmt.Errorf("name too long")
+func (dr * drinkRepository) Edit(id uint64, newName string) (int, error) {
+	if !dr.IsNameValid(newName) {
+		return 0, fmt.Errorf("incorrect new name")
 	}
 
-	return getBoolResult(getIntFunctionResult(dr.db, func(con *sql.DB) (*sql.Rows, error) {
+	res, err := getIntFunctionResult(dr.db, func(con *sql.DB) (*sql.Rows, error) {
 		return con.Query(`SELECT edit_drink(?, ?)`, id, newName)
-	}))
+	})
+
+	if err != nil {
+		return 0, err
+	} else if res == -1 {
+		return 0, fmt.Errorf("error while update user with new name %s and id %d", newName, id)
+	}
+
+	return res, nil
 }
 
 func (dr *drinkRepository) selectDrinks(q querier) (map[uint64]Drink, error) {
