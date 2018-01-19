@@ -3,6 +3,7 @@ CREATE TABLE drink
 (
   drink_id SERIAL,
   drink_name VARCHAR(255) NOT NULL UNIQUE,
+  drink_type TINYINT NOT NULL DEFAULT 0,
   PRIMARY KEY(drink_id)
 );
 
@@ -26,7 +27,7 @@ DELIMITER ;
 
 DELIMITER $$
 DROP FUNCTION IF EXISTS `add_drink`$$
-CREATE FUNCTION `add_drink`(newDrinkName VARCHAR(255))
+CREATE FUNCTION `add_drink`(newDrinkName VARCHAR(255), type TINYINT)
   RETURNS TINYINT(1)
 DETERMINISTIC
   BEGIN
@@ -38,7 +39,7 @@ DETERMINISTIC
     IF (lock_success = 1) THEN
       SELECT COUNT(*) = 0 INTO drink_not_exists FROM drink WHERE drink_name = newDrinkName;
       IF (drink_not_exists = 1) THEN
-        INSERT INTO drink SET drink_name = newDrinkName;
+        INSERT INTO drink SET drink_name = newDrinkName, drink_type = type;
       END IF;
 
       SELECT unlock_drink() INTO lock_success;

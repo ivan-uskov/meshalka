@@ -14,7 +14,6 @@ const (
 	addDrinkAction = `add_drink`
 	removeDrinkAction = `remove_drink`
 	editDrinkAction = `edit_drink`
-	addCocktailAction = `add_cocktail`
 	listAction = `list`
 )
 
@@ -78,15 +77,13 @@ func (r *router) executeAction(w http.ResponseWriter, hr *http.Request, req *req
 	case registerAction:
 		actions.Registration(w, hr, rc)
 	case addDrinkAction:
-		actions.AddDrink(w, rc)
+		actions.AddDrink(w, hr, rc)
 	case listAction:
 		actions.List(w, rc)
 	case removeDrinkAction:
 		actions.RemoveDrink(w, hr, rc)
 	case editDrinkAction:
 		actions.EditDrink(w, hr, rc)
-	case addCocktailAction:
-		actions.AddCocktail(w, rc)
 	default:
 		http.NotFound(w, hr)
 	}
