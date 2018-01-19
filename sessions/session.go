@@ -35,6 +35,30 @@ func (s *session) Login(w http.ResponseWriter, r *http.Request, u *model.User) b
 }
 
 func (s *session) AutoLoginFilter(r *http.Request) (*model.User, bool) {
+	u, ok := s.loginByCookie(r)
+	if ok {
+		return u, ok
+	}
+
+	return s.loginByHeaders(r)
+}
+
+func (s *session) loginByHeaders(r *http.Request) (*model.User, bool) {
+	login := r.Header.Get(`X-Login`)
+	password := r.Header.Get(`X-Password`)
+	if len(login) > 0 && len(password) > 0 {
+		user, err := model.NewUserRepository(s.db).SelectUserByLoginInfo(login, password)
+		if err != nil {
+			return nil, false
+		}
+
+		return user, true
+	}
+
+	return nil, false
+}
+
+func (s *session) loginByCookie(r *http.Request) (*model.User, bool) {
 	session, err := s.store.Get(r, cookieName)
 	if err != nil || session.IsNew {
 		return nil, false

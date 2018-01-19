@@ -56,7 +56,7 @@ func (r *router) Register() {
 }
 
 func isPrivateAction(action string) bool {
-	return false
+	return !(action == loginAction || action == registerAction)
 }
 
 func (r *router) executeAction(w http.ResponseWriter, hr *http.Request, req *requestBody) {
