@@ -28,11 +28,12 @@ DELIMITER ;
 DELIMITER $$
 DROP FUNCTION IF EXISTS `add_drink`$$
 CREATE FUNCTION `add_drink`(newDrinkName VARCHAR(255), type TINYINT)
-  RETURNS TINYINT(1)
+  RETURNS BIGINT
 DETERMINISTIC
   BEGIN
     DECLARE lock_success TINYINT(1) DEFAULT 0;
     DECLARE drink_not_exists TINYINT(1) DEFAULT 0;
+    DECLARE returnVal BIGINT DEFAULT -1;
 
     SELECT lock_drink() INTO lock_success;
 
@@ -40,12 +41,15 @@ DETERMINISTIC
       SELECT COUNT(*) = 0 INTO drink_not_exists FROM drink WHERE drink_name = newDrinkName;
       IF (drink_not_exists = 1) THEN
         INSERT INTO drink SET drink_name = newDrinkName, drink_type = type;
+        SELECT LAST_INSERT_ID() INTO returnVal;
+      ELSE
+        SELECT 0 INTO returnVal;
       END IF;
 
       SELECT unlock_drink() INTO lock_success;
     END IF;
 
-    RETURN lock_success && drink_not_exists;
+    RETURN returnVal;
   END $$
 
 DELIMITER ;
