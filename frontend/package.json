@@ -1,0 +1,11 @@
+{
+  "name": "meshalka",
+  "version": "1.0.0",
+  "description": "online coctail bar project",
+  "main": "server.js",
+  "scripts": {},
+  "dependencies": {
+    "express": "^4.16.2",
+    "gulp": "^3.9.1"
+  }
+}

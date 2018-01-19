@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <link rel="stylesheet" href="css/list.css">
+</head>
+<body>
+<div class="mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--grey-100">
+    <div class="mdl-layout__header">
+        <button id="add-drink"  class="mdl-button mdl-js-button mdl-button--fab add-button">
+            <i class="material-icons">add</i>
+        </button>
+        <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" minlength="1" maxlength="255" id="default-drink-name" />
+            <label class="mdl-textfield__label mdl-color-text--white" for="default-drink-name">New drink</label>
+        </div>
+        <div class="drink-types">
+            <label class="mdl-radio mdl-button--colored mdl-js-radio mdl-js-ripple-effect" for="drink">
+                <input class="mdl-radio__button" id="drink" name="drink-types" type="radio" value="0" checked>
+                <span class="mdl-radio__label">Drink</span>
+            </label>
+            <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="cocktail">
+                <input class="mdl-radio__button" id="cocktail" name="drink-types" type="radio" value="1">
+                <span class="mdl-radio__label">Cocktail</span>
+            </label>
+        </div>
+    </div>
+    <main class="mdl-layout__content">
+        <div id="drinks" class="mdl-grid">
+        </div>
+    </main>
+
+
+    <div id="drink-template" style="display: none">
+        <div class="mdl-cell mdl-cell--3-col">
+            <div class="mdl-grid mdl-card mdl-shadow--6dp drink-card">
+                <div class="mdl-card__title mdl-shadow--6dp mdl-card--expand mdl-color--indigo mdl-color-text--white">
+                    <h2 class="mdl-card__title-text">#description#</h2>
+                </div>
+                <div class="mdl-card__actions">
+                    <button class="mdl-button mdl-js-button mdl-button--fab delete-button">
+                        <i class="material-icons">delete</i>
+                    </button>
+                    <button class="mdl-button mdl-js-button mdl-button--fab edit-button">
+                        <i class="material-icons">edit</i>
+                    </button>
+                </div>
+                <div class="mdl-card__supporting-text">
+                    <div class="mdl-textfield mdl-js-textfield">
+                        <input class="mdl-textfield__input" value="#description#" minlength="1" maxlength="255" id="#id#" />
+                        <label class="mdl-textfield__label" for="#id#">Drink name</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="component-template" style="display: none">
+        <div class="component">
+            <button class="mdl-button mdl-js-button mdl-button--icon clear-button">
+                <i class="material-icons">clear</i>
+            </button>
+            <select class="component-select">
+            </select>
+            <div class="mdl-textfield mdl-js-textfield volume-input">
+                <input class="mdl-textfield__input" pattern="-?[0-9]*(\.[0-9]+)?" minlength="1" maxlength="6" id="#id#" />
+                <label class="mdl-textfield__label" for="#id#"></label>
+            </div>
+            ml
+        </div>
+    </div>
+
+
+    <div id="add-component-button-template" style="display: none">
+        <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab add-component-button">
+            <i class="material-icons">add</i>
+        </button>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+<script src="js/list.js"></script>
+</body>
+</html>

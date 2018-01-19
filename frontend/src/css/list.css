@@ -1,0 +1,94 @@
+.drink-card {
+    width: 100%;
+    padding: 0;
+}
+
+.drink-card .mdl-card__title {
+    width: calc(100% - 72px);
+    height: 200px;
+}
+
+.drink-card .mdl-card__actions {
+    width: 72px;
+    bottom: 0;
+}
+
+.edit-button, .delete-button {
+    margin: 20px 0;
+    display: flex;
+}
+
+.add-button {
+    margin: 0 30px;
+}
+
+.mdl-card__title, .mdl-card__actions {
+    z-index: 1;
+    border-radius: 0 20px 20px 0;
+}
+
+.mdl-card__supporting-text {
+    z-index: 0;
+    width: 100%;
+}
+
+.mdl-layout__header {
+    display: block;
+}
+
+.mdl-layout__header > * {
+    display: inline-block;
+}
+
+.drink-types {
+    margin-left: 23px;
+    vertical-align: middle;
+}
+
+.drink-types .mdl-radio {
+    display: block;
+}
+
+.drink-types .mdl-radio__outer-circle {
+    border-color: #FFFFFF !important;;
+}
+
+.drink-types .mdl-radio__inner-circle {
+    background: #FFFFFF !important;
+}
+
+.mdl-layout__header .mdl-textfield__input {
+    border-bottom: 1px solid rgba(256,256, 256,.60);
+}
+
+div[disabled].mdl-card__supporting-text {
+    display: none;
+}
+
+.drink-type {
+    width: 100px;
+}
+
+.drink-type .mdl-textfield__input {
+    background: #FEFEFE;
+}
+
+.component > *{
+    display: inline-block;
+}
+
+.component-select {
+    width: 200px;
+    height: 35px;
+    font-size: 16px;
+    font-family: "Helvetica","Arial",sans-serif;
+}
+
+.volume-input {
+    margin-left: 5px;
+    width: 58px;
+}
+
+.add-component-button {
+    display: block;
+}
