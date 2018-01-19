@@ -13,9 +13,10 @@ const (
 )
 
 type Drink struct {
-	Id   uint64 `json:"id"`
-	Name string `json:"name"`
-	Type int    `json:"type"`
+	Id         uint64  `json:"id"`
+	Name       string  `json:"name"`
+	Type       int     `json:"type"`
+	Components []Drink `json:"components"`
 }
 
 type DrinkRepository interface {
@@ -87,7 +88,20 @@ func (dr *drinkRepository) Remove(id int) (bool, error) {
 
 func (dr *drinkRepository) List() (map[uint64]Drink, error) {
 	return dr.selectDrinks(func(con *sql.DB) (*sql.Rows, error) {
-		return con.Query(`SELECT drink_id, drink_name FROM drink`)
+		return con.Query(`
+			SELECT
+			  d.drink_id,
+			  d.drink_name,
+			  d.drink_type,
+			  COALESCE(subD.drink_id, 0),
+			  COALESCE(subD.drink_name, '')
+			FROM
+			  drink d
+			  LEFT JOIN cocktail_element ce ON d.drink_id = ce.cocktail_id
+			  LEFT JOIN drink subD ON ce.drink_id = subD.drink_id
+			ORDER BY
+			  d.drink_type ASC
+		`)
 	})
 }
 
@@ -125,15 +139,19 @@ func (dr *drinkRepository) selectDrinks(q querier) (map[uint64]Drink, error) {
 }
 
 func fetchDrinks(rows *sql.Rows) (map[uint64]Drink, error) {
-	var drink Drink
+	drink := Drink{Components:[]Drink{}}
+	var subDrink Drink
 	drinks := make(map[uint64]Drink)
 
 	for rows.Next() {
-		err := rows.Scan(&drink.Id, &drink.Name)
+		err := rows.Scan(&drink.Id, &drink.Name, &drink.Type, &subDrink.Id, &subDrink.Name)
 		if err != nil {
 			return nil, err
 		}
 
+		if drink.Type == cocktailType && subDrink.Id > 0 {
+			drink.Components = append(drink.Components, subDrink)
+		}
 		drinks[drink.Id] = drink
 	}
 
